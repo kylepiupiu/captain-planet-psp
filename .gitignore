@@ -1,0 +1,15 @@
+*.o
+*.d
+*.elf
+*.prx
+EBOOT.PBP
+PARAM.SFO
+save.dat*
+PLANET_BOOT.LOG
+tests/test_game
+tests/*.ppm
+tests/*.png
+tests/*.dat*
+qa/emulator/
+__pycache__/
+.DS_Store

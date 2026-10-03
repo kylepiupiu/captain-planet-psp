@@ -1,0 +1,5 @@
+Raster glyphs: Noto Sans CJK SC (Google / Noto authors, SIL OFL 1.1), and DejaVu Sans Mono (DejaVu / Bitstream Vera license).
+Sources:
+https://github.com/notofonts/noto-cjk
+https://dejavu-fonts.github.io/
+See FONT_LICENSE.txt and DEJAVU_LICENSE.txt.
