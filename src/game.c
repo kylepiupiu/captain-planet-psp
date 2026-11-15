@@ -27,6 +27,63 @@ static void escort_follow(void){
 }
 int game_blocked(float x,float y){int xs[2]={(int)(x-7)/TILE,(int)(x+7)/TILE},ys[2]={(int)(y-5)/TILE,(int)(y+3)/TILE};for(int a=0;a<2;a++)for(int b=0;b<2;b++){if(xs[a]<1||ys[b]<1||xs[a]>=MW-1||ys[b]>=MH-1||g.tiles[ys[b]][xs[a]]==1)return 1;}return 0;}
 static void add_enemy(float x,float y,int kind){for(int i=0;i<MAXEN;i++)if(!g.enemies[i].active){Enemy *e=&g.enemies[i];memset(e,0,sizeof(*e));e->x=x;e->y=y;e->kind=kind;e->active=1;e->hp=e->maxhp=kind==3?36+episodes[g.level].season*3:kind==2?7:4;e->cool=40+rng(100);return;}}
+
+// Episode 1 engineering slice: authored layout, deterministic objective order.
+// This is a level-design prototype, NOT cleared franchise artwork/story content.
+static void demo_box(int x0,int y0,int x1,int y1,int tile){
+ for(int y=y0;y<=y1;y++)for(int x=x0;x<=x1;x++)mark(x,y,tile);
+}
+static void setup_first_episode(void){
+ // Water, coastal road and machine areas have stable positions on every run.
+ demo_box(2,2,45,8,3);
+ demo_box(2,9,39,9,3);
+ demo_box(14,11,17,14,1);
+ demo_box(27,10,31,13,1);
+ demo_box(26,20,29,23,1);
+ demo_box(37,20,41,22,1);
+ demo_box(2,26,11,29,1);
+ // The spine and each branch are hand-authored; no RNG may block objectives.
+ corridor(4,16,11,11);
+ corridor(11,11,23,23);
+ corridor(23,23,36,10);
+ corridor(36,10,44,16);
+ corridor(11,11,23,16);
+ corridor(23,16,23,23);
+ corridor(36,10,36,16);
+ cleararea(4,16,3);
+ cleararea(44,16,3);
+ const int position[3][2]={{11,11},{23,23},{36,10}};
+ const int powers[3]={0,3,2}; // earth -> water -> wind
+ for(int i=0;i<3;i++){
+  Object *o=&g.objs[i];
+  int x=position[i][0],y=position[i][1];
+  cleararea(x,y,2);
+  o->x=x*TILE+10;o->y=y*TILE+10;
+  o->type=0;o->hero=powers[i];o->hp=1;o->active=1;
+ }
+ // Pollution is visible near facilities, but avoids mandatory task nodes.
+ demo_box(17,19,20,21,4);
+ demo_box(30,24,34,26,4);
+ demo_box(39,11,41,13,4);
+ for(int i=0;i<3;i++){
+  int x=position[i][0],y=position[i][1];
+  cleararea(x,y,2);
+ }
+ const int packs[3][2]={{7,21},{28,17},{40,24}};
+ for(int i=0;i<3;i++){
+  Object *o=&g.objs[g.needed+i];int x=packs[i][0],y=packs[i][1];
+  cleararea(x,y,1);
+  o->x=x*TILE+10;o->y=y*TILE+10;
+  o->active=1;o->type=10;o->hero=i;
+ }
+ g.escortx=g.objs[0].x;g.escorty=g.objs[0].y;
+ add_enemy(19*TILE+10,16*TILE+10,0);
+ add_enemy(31*TILE+10,17*TILE+10,1);
+ add_enemy(39*TILE+10,16*TILE+10,2);
+ g.save.current=g.level;g.dirty=1;
+ game_toast("L/R: TEAM  SQUARE: INTERACT  X: ELEMENT");
+}
+
 static void shoot(float x,float y,float vx,float vy,int hero,int enemy,int damage){for(int i=0;i<MAXSHOT;i++)if(!g.shots[i].active){Shot *s=&g.shots[i];s->x=x;s->y=y;s->vx=vx;s->vy=vy;s->hero=hero;s->enemy=enemy;s->damage=damage;s->active=1;s->life=enemy?120:38;return;}}
 static void reward(Object *o){o->state=1;g.done++;g.energy=(int)clampf(g.energy+26,0,100);g.hp=(int)clampf(g.hp+8,0,g.maxhp);burst(o->x,o->y,o->hero,16);game_event(3);}
 static void damage(int amount){if(g.invincible||g.power||g.dash)return;g.hp-=amount;g.invincible=42;burst(g.x,g.y,6,8);game_event(4);if(g.hp<=0){g.hp=0;g.mode=FAIL;g.menu=0;}}
@@ -35,6 +92,7 @@ void game_init(void){memset(&g,0,sizeof(g));g.save.magic=0x43504C54;g.save.versi
 int game_readable(int level){return level>=0&&level<EP_COUNT;}
 void game_start(int level){if(!game_readable(level))return;Save save=g.save;int err=g.asset_error;memset(&g,0,sizeof(g));g.save=save;g.asset_error=err;g.level=level;const Episode *e=&episodes[level];g.hero=e->lead;g.rng=0x431054u+level*9137u;g.mode=BRIEF;g.maxhp=g.hp=g.save.difficulty?100:140;g.needed=e->count;g.energy=18;g.has_ring=e->mode!=5;g.restricted=e->mode==5;g.mission_timer=(g.save.difficulty?270:390)*30;g.startx=g.x=4*TILE+10;g.starty=g.y=16*TILE+10;g.exitx=44*TILE+10;g.exity=16*TILE+10;
  for(int y=0;y<MH;y++)for(int x=0;x<MW;x++){g.tiles[y][x]=(x==0||y==0||x==MW-1||y==MH-1)?1:0;}
+ if(level==0){setup_first_episode();return;}
  for(int i=0;i<120;i++){int x=2+rng(MW-4),y=2+rng(MH-4);mark(x,y,1);if(rng(3)==0)mark(x+1,y,1);}
  // Two landform bands create separate exploration regions. Carved passages remain stable.
  for(int x=15;x<=32;x+=17)for(int y=1;y<MH-1;y++)for(int w=0;w<2;w++)mark(x+w,y,(e->biome==5||e->biome==9||e->biome==11)?1:3);
@@ -52,11 +110,18 @@ void game_start(int level){if(!game_readable(level))return;Save save=g.save;int 
 }
 static void interact(void){const Episode *e=&episodes[g.level];for(int i=0;i<MAXOBJ;i++){Object *o=&g.objs[i];if(!o->active||o->state||distance(g.x,g.y,o->x,o->y)>39)continue;
  if(o->type==10){o->state=1;g.hp=(int)clampf(g.hp+30,0,g.maxhp);g.energy=(int)clampf(g.energy+20,0,100);game_toast("补给已回收：恢复生命与团队能量。");game_event(3);return;}
+ if(g.level==0&&i<g.needed&&i>g.done){game_toast("FOLLOW THE OBJECTIVE ORDER: 1 / 2 / 3");return;}
  if(e->mode==1&&g.hero!=4&&!g.power){game_toast("切换马蒂，用心灵之力安抚并救援。");return;}
  if(e->mode==0||e->mode==3||e->mode==6){if(g.hero!=o->hero&&!g.power){const char *tips[]={"需要夸米：土之力稳固机关。","需要惠勒：火之力驱动机关。","需要琳卡：风之力疏通机关。","需要吉：水之力冷却或净化。","需要马蒂：心灵之力建立联系。"};game_toast(tips[o->hero]);return;}}
  if(e->mode==7&&g.phase!=(i%2)){game_toast("这个时间锚尚未显现：按SELECT切换时相。");return;}
  if(e->mode==9){if(o->timer<30*10){game_toast("守在装置附近：抵挡袭击，等待修复完成。");return;}}
  reward(o);
+ if(g.level==0){
+  const char *next[]={"VALVE STABLE - CONTAIN THE PIPE SPILL", "PIPE SECURED - SHUT DOWN THE DRILL", "DRILL DISABLED - REACH THE EXIT"};
+  game_toast(next[i<3?i:2]);
+  if(g.done==g.needed)game_toast("FINAL ENCOUNTER: CHARGE UP AND REACH EXIT");
+  return;
+ }
  if(e->mode==5&&g.done==g.needed){g.has_ring=1;g.energy=100;game_toast("装备恢复！现在可以使用戒指与召唤。");}
  else if(e->mode==1)game_toast("救援成功！伙伴已将它送往安全地点。");
  else if(e->mode==2)game_toast("线索已记录。找到其余证据，再返回撤离点。");
