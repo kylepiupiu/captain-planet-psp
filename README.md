@@ -28,7 +28,7 @@ The repository contains a **v0.1 gameplay prototype**, **not** 113 completed epi
 - Episode-accurate characters, animation, villains, cutscenes or narrative
 - Rights clearance for the original show's characters, plot elements or fan-art derivatives
 
-**Current priority: build one credible vertical slice of episode 1, “A Hero for Earth,” before expanding the campaign.** See [Episode 1 vertical-slice specification](docs/EPISODE01_VERTICAL_SLICE.md).
+**Current priority: complete and validate one credible vertical slice of episode 1, “A Hero for Earth,” before expanding the campaign.** The proposed first-level source branch includes a fixed coastal map, ordered interactions, a drilling-rig backdrop and stage HUD; the updated PSP executable and visual quality have **not** yet passed emulator or hardware acceptance. See [Episode 1 vertical-slice specification](docs/EPISODE01_VERTICAL_SLICE.md).
 
 ## Contributing
 
@@ -54,7 +54,7 @@ gcc -std=c99 -O1 -g -fsanitize=address,undefined -Wno-unused-variable \
 ASAN_OPTIONS=detect_leaks=0 ./tests/test_game
 ```
 
-The tests do **not** establish PSP hardware performance or rights clearance. Build/test instructions: [docs/INSTALL_AND_BUILD.md](docs/INSTALL_AND_BUILD.md) (currently Chinese). Existing test evidence: [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md).
+The tests do **not** establish PSP hardware performance or rights clearance. English build/test instructions: [docs/BUILDING.en.md](docs/BUILDING.en.md). Original [Chinese installation guide](docs/INSTALL_AND_BUILD.md). Existing test evidence: [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md).
 
 The v0.1 repository also contains a historical game ZIP and character-based assets. Their inclusion **does not** mean we are authorized to license or encourage redistribution of them. **Do not repost or mirror those files.** The release/distribution decision remains on hold pending a rights review.
 
