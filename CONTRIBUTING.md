@@ -1,28 +1,35 @@
-# 一起完善地球超人 PSP
+# Contributing to the PSP prototype
 
-感谢愿意参与这个项目。现在最需要把第一关的体验打磨好，并建立可重复使用的制作方法。
+Thanks for considering a contribution. **Our current goal is a technically solid Episode 1 vertical slice**, not simply adding more episode entries. Read [rights & licensing](RIGHTS_AND_LICENSING.md) before contributing.
 
-## 提问题与建议
+## First, check rights
 
-在 Issues 中写清问题类型、目标效果，以及截图或相关剧集信息。程序问题请提供 PSP 机型/固件或 PPSSPP 版本、关卡编号、操作步骤、预期与实际结果；启动问题可附 PLANET_BOOT.LOG。请勿提交个人存档或无关个人资料。
+This repository is an unlicensed fan prototype. Contributions to original engine code, unit tests and generic environmental effects are welcome. Do not upload TV footage, audio, screenshots, unlicensed character likenesses or copyrighted artwork. The MIT grant concerns only original code that contributors can legally license; it is **not** a franchise license.
 
-## 提交修改
+For new art/data, document where it came from, who owns it, its license, and how it was made. Do not assume AI-generated assets that resemble a protected character are automatically clear.
 
-Fork 仓库，从 main 创建分支，一次 PR 解决一项明确问题。说明修改目的、具体变化、验证方式和仍存在的限制。涉及画面时附前后截图；涉及玩法时说明如何重现和测试。不要把未经验证的行为写成已通过实机测试。
+## How to help
 
-保持 PSP 480×272 与离线游玩兼容；注意 PSP 内存和性能约束。可复用现有 src/game.c 与 src/render.c 的分离方式。运行逻辑测试的方法见 docs/INSTALL_AND_BUILD.md。
+1. Search issues and pick **one** scoped change, ideally from [Episode 1 criteria](docs/EPISODE01_VERTICAL_SLICE.md).
+2. Fork and create a branch from `main`; submit a small PR with a clear description.
+3. Explain the expected change, affected files, how to reproduce/test, and what was **not** tested.
+4. Include before/after screenshots only if you have rights to share them; do not falsify PSP hardware results.
 
-## 美术与剧情
+For PSP or PPSSPP bugs: report hardware model/firmware (or PPSSPP version), episode/stage, sequence of inputs, expected/actual behavior, crash log if any, and reproducible steps. Never include private save files or personal data.
 
-人物忠实于原作是长期目标，当前图集不是最终标准。提交视觉修订时说明依据的剧集与时间点，不要上传整集视频。新增素材应注明来源、制作方式和许可，不提交来源不明的音乐或商业游戏素材。
+## Technical guardrails
 
-剧集条目、剧情锚点与实际游戏机制应分别说明。先讨论大规模架构重写，避免投入后无法合并。
+- Keep 480×272 and PSP offline compatibility; conserve memory and CPU.
+- Preserve the current save format unless migration and regression tests are included.
+- Prefer minimal changes to `src/game.c` and `src/render.c` over rewrites.
+- Test objective reachability, collisions, save integrity, controls and FPS separately.
+- Use `docs/BUILD_REPORT.md` language carefully: host tests, emulator tests and real-device tests are different evidence levels.
+- First-level art polish should not conceal missing mechanics.
 
-## 当前优先事项
+## Development commands
 
-- 第一集独立地图、目标流程和对应反派。
-- 六角色的造型校正与更自然的动作。
-- PSP 实机运行与稳定性反馈。
-- 界面、目标提示、碰撞和战斗手感。
+See [build instructions](docs/INSTALL_AND_BUILD.md) and the build/test snippet in the [README](README.md).
 
-提交贡献不改变原作角色与品牌的权利归属。第三方材料遵守各自许可。
+## Collaboration
+
+We welcome issues, code reviews, test data and small pull requests. Maintainers review functionality, license provenance and scope before merging. Submitting a PR does not guarantee a merge or a public release.
