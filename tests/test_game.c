@@ -25,7 +25,19 @@ int main(void){game_init();assert(render_load("assets"));shot("tests/title.ppm")
  game_start(0);press(CROSS);
  for(int i=0;i<3;i++)assert(path(g.x,g.y,g.objs[i].x,g.objs[i].y,0));
  assert(path(g.x,g.y,g.exitx,g.exity,0));
- printf("PASS episode 1 authored coast, hero-specific objectives and sequence gate\n");
+ // Full sequence and evacuation gate: a live final guard must block the exit.
+ no_enemies();
+ for(int i=0;i<3;i++){
+  g.x=g.objs[i].x;g.y=g.objs[i].y;g.hero=g.objs[i].hero;
+  press(SQUARE);assert(g.done==i+1&&g.objs[i].state);
+ }
+ game_update();assert(g.boss_spawned==1);
+ g.x=g.exitx;g.y=g.exity;press(SQUARE);assert(g.mode==PLAY);
+ int guard=-1;for(int i=0;i<MAXEN;i++)if(g.enemies[i].active&&g.enemies[i].kind==3){guard=i;break;}
+ assert(guard>=0);g.enemies[guard].hp=0;game_update();
+ assert(g.boss_spawned==2);
+ press(SQUARE);assert(g.mode==CLEAR);
+ printf("PASS episode 1 authored coast, ordered objectives and guard-gated exit\n");
  int counts[6]={0};int modes[10]={0};
  for(int level=0;level<113;level++){
   game_start(level);const Episode *e=&episodes[level];counts[e->season-1]++;modes[e->mode]++;assert(g.mode==BRIEF);press(CROSS);assert(g.mode==PLAY);no_enemies();
