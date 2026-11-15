@@ -21,11 +21,11 @@ Scenes should have author-placed geometry, connected paths and environmental sil
 
 ## Release acceptance
 
-- [ ] Source update and documented exact scope of code changes
-- [ ] Host compiler and regression tests, including first-level interactions and pathing
+- [x] Initial source implementation and documented code scope (first engineering pass; not visual sign-off)
+- [x] Host GCC sanitizer regression tests, including first-level interactions, sequencing, boss/exit gate and pathing ([CI evidence](https://github.com/kylepiupiu/captain-planet-psp/actions))
 - [ ] PSP toolchain build and actual PPSSPP boot/render/input verification
 - [ ] Real PSP hardware check: startup, 30/60 FPS behavior, memory, audio, save/restore, long play
 - [ ] UI legibility on 480×272, controls and no unintentional soft locks
 - [ ] First-level music/art/character IP review and full release rights gate
 
-**A screenshot mockup or passing host test is not a shipped PSP game.** Track test evidence separately.
+**A passing host test is not a shipped PSP game. Visual art, genuine playability and real-hardware tests remain pending.** Track test evidence separately.
