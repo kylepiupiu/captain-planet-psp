@@ -1,5 +1,14 @@
 # Permission strategy and rights-holder outreach
 
+> **Project decision — 2026-11-16:** The maintainer has selected **Path A: preserve Captain Planet characters, names, story adaptations and the 113-episode long-term goal, subject to obtaining suitable permission**. Do **not** switch to an original-IP rebrand by default. Path B below is only a non-selected contingency, not the active roadmap. This decision does not grant any IP rights or authorize distribution.
+
+## Verified initial routing (not an authorization)
+
+- A 2024 **Warner Bros. Discovery official licensing information sheet** lists `WBCPInquiries@wbd.com` for consumer-product requests. Use it **only to seek the correct routing for a noncommercial fan-game adaptation**; it is not confirmed as the specific games licensing team. Source: https://static-wbd-cdn.wbd.com/s3_assets/wp-content/uploads/2024/04/LICENSING-SUBMISSION-FORM-2024-WBD.pdf
+- The sheet separately lists `Jane.Elms@wbd.com` under **Warner Bros. Interactive Entertainment (our GAMES)**; do not assume that this person is responsible for outside franchise-game licensing. Request an appropriate introduction instead of sending unsolicited gameplay IP for approval.
+- Public trademark records identify **TBS Productions, Inc.** for marks associated with the animated series. Other published notices identify **Turner Entertainment Co.** for series characters and elements. An ownership-chain and licensing-authority check is still required.
+- **No rights-holder outreach or written permission has yet been verified.** The existing public GitHub archive/art and downloads remain a risk; avoid promoting them or distributing new binaries before clearance.
+
 **Engineering policy:** do not interpret a disclaimer, “non-commercial”, an AI-generated image, or source availability as a license to adapt *Captain Planet and the Planeteers*.
 
 ## Path A — request formal franchise permission
