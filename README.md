@@ -1,57 +1,71 @@
-# 地球超人：元素使命 · Captain Planet PSP
+# Captain Planet PSP — Element Mission
 
-**这个游戏由 ChatGPT-6 Astra 制作，Kyle 提出创意、玩法方向和还原要求。欢迎有兴趣的朋友一起帮忙优化！**
+**Early PSP homebrew experiment · C / PSPSDK · 480 × 272 · Community contributions welcome**
 
-这是一个以《地球超人》动画为题材的非官方 PSP 同人冒险游戏项目。我们希望把六季动画逐步改编成可以在 PSP 上游玩的冒险关卡，并持续改善人物、场景、动作和故事表现。
+> **Rights notice — read before distributing:** This is an **unofficial, unlicensed fan prototype** inspired by *Captain Planet and the Planeteers*. It is not approved by or affiliated with the original rights holders. The TV characters, names, story world and related protected elements are **not offered under an open-source license**. Do not redistribute game builds, character art, episode adaptations, or branded materials on the assumption that a code license covers them. See [Rights & licensing](RIGHTS_AND_LICENSING.md) and [Rights audit](docs/RIGHTS_AUDIT.md). No statement here guarantees that a particular use is lawful.
 
-目前提供 **v0.1 可玩初版**：原生 C / PSPSDK，480×272 中文界面，五位队员切换、元素攻击、召唤地球超人和存档系统。
+![Screenshot of the v0.1 prototype (not a final level)](docs/preview.png)
 
-![游戏实际画面](docs/preview.png)
+## What is this project?
 
-## 下载与试玩
+An AI-assisted, community-oriented experiment in creating an adventure game for the original Sony PSP. Kyle initiated the idea, directed the gameplay and visual goals, and used ChatGPT to help implement the initial version.
 
-[下载 PSP v0.1 安装包](downloads/CaptainPlanet_PSP_v0.1.zip?raw=true)
+The repository contains a **v0.1 gameplay prototype**, **not** 113 completed episodes. Its episode catalog has 113 entries, but the playable tasks share ten systems and procedural maps. Most characters, unique bosses, dialogue and episode-specific missions remain unfinished.
 
-解压后，将完整的 `PLANET` 文件夹复制到记忆棒的 `PSP/GAME/` 目录。请保留 `assets` 文件夹；运行需要支持自制程序的 PSP 环境。也可以在 PPSSPP 中打开 EBOOT.PBP。
+### Available in the current v0.1 baseline
 
-[安装、按键和构建说明](docs/INSTALL_AND_BUILD.md) · [113 集任务映射](docs/EPISODE_MAP.md) · [测试报告](docs/BUILD_REPORT.md)
+- Native C / PSPSDK game framework, PSP-sized display and Chinese-language interface
+- Five selectable Planeteers and elemental combat
+- Temporary Captain Planet summon, energy and health systems
+- Mission interaction, map, pause, checkpoint-style progress, and save/backup recovery
+- Episode catalog for six seasons / 113 entries using shared mission templates
+- Initial PPSSPP emulator boot, input, rendering and regression-test evidence
 
-## 现在完成了什么
+### Not yet verified or complete
 
-- 六季 113 个剧集条目及对应任务入口。
-- 五位队员、五种元素与限时地球超人召唤。
-- 停机、救援、调查、净化、护送等十类任务。
-- 地图、难度、暂停、星级记录和自动存档。
-- PSP 原生编译，以及模拟器启动、移动、暂停和素材加载验证。
+- Real PSP hardware compatibility, performance, long-play stability or battery behavior
+- End-to-end combat balance and distinct authored layouts for all 113 entries
+- Episode-accurate characters, animation, villains, cutscenes or narrative
+- Rights clearance for the original show's characters, plot elements or fan-art derivatives
 
-**当前版本仍是原型。** 113 关基于共用任务框架和程序化地图，尚未逐集精制；剧情依据公开简介改编，没有逐集观看全部原片。人物是参考动画生成和整理的二维图集，尚未达到“一比一还原”。PSP 实机性能与全部关卡的完整战斗平衡仍待验证。
+**Current priority: complete and validate one credible vertical slice of episode 1, “A Hero for Earth,” before expanding the campaign.** The proposed first-level source branch includes a fixed coastal map, ordered interactions, a drilling-rig backdrop and stage HUD; the updated PSP executable and visual quality have **not** yet passed emulator or hardware acceptance. See [Episode 1 vertical-slice specification](docs/EPISODE01_VERTICAL_SLICE.md).
 
-## 欢迎一起优化
+## Contributing
 
-无论你擅长编程、美术，还是喜欢《地球超人》、愿意在 PSP 上试玩，都欢迎通过 **Issues 提建议或报告问题，通过 Pull Requests 提交改进**。
+We welcome help with **original engine code, accessibility, game design systems, testing and technical documentation**. Open an [issue](../../issues) for a small scoped improvement, or read the [contribution guide](CONTRIBUTING.md) before submitting a pull request.
 
-我们尤其希望得到这些帮助：
+Especially useful: PSP hardware testing, stable frame rate, collision and control polish, reproducible bugs, and **original or properly licensed** generic effects and environment assets. Please **do not upload copied TV screenshots, episodes, copyrighted audio or unlicensed character likenesses**.
 
-1. **角色与动作**：校正原作人物比例、服装、发型，补充行走、攻击、受击和合体动画。
-2. **关卡与剧情**：逐集核对原片，先把第一集做成更完整、好玩的示范关卡，再逐季扩展。
-3. **场景与首领**：改善地图布局、环境细节，制作对应剧集的反派与首领机制。
-4. **PSP 优化**：实机测试、帧率与内存优化、按键手感和存档可靠性。
-5. **试玩反馈**：提供机型、运行环境、关卡编号、复现步骤和截图。
+We have not obtained clearance to authorize reuse of the show IP. If you want to contribute a character or story adaptation, **discuss the rights situation first** rather than assuming your contribution can be redistributed.
 
-请先阅读 [贡献指南](CONTRIBUTING.md)。不要求一次完成很大的功能，一个明确的小修复也很有价值。
+## Developer build and testing
 
-## 源码与构建
-
-安装 PSPSDK，设置 `PSPDEV` 并将其 `bin` 目录加入 PATH，在项目根目录执行：
+With PSPSDK installed and `PSPDEV` configured:
 
 ```sh
 make
 ```
 
-构建所需的预生成字体、剧集数据和图集已包含在仓库。详细的资源再生成与逻辑测试命令见 [构建说明](docs/INSTALL_AND_BUILD.md)。
+Host logic/render tests on Linux with GCC and the checked-in generated assets:
 
-## 项目说明
+```sh
+gcc -std=c99 -O1 -g -fsanitize=address,undefined -Wno-unused-variable \
+  tests/test_game.c src/game.c src/render.c -lm -o tests/test_game
+ASAN_OPTIONS=detect_leaks=0 ./tests/test_game
+```
 
-本项目由 Kyle 发起，初版游戏程序与制作工作由 ChatGPT-6 Astra 完成，后续欢迎社区共同改进。这是个人同人实验，不是 OpenAI 或原作权利人的官方项目。
+The tests do **not** establish PSP hardware performance or rights clearance. English build/test instructions: [docs/BUILDING.en.md](docs/BUILDING.en.md). Original [Chinese installation guide](docs/INSTALL_AND_BUILD.md). Existing test evidence: [docs/BUILD_REPORT.md](docs/BUILD_REPORT.md).
 
-《地球超人》的角色、名称和原作设定属于各自权利人。源码公开供查看与协作，不代表原作素材已获得商业授权。剧情资料来源、改写许可与字体许可见 [来源记录](docs/SOURCES.md) 和 [licenses](licenses)。
+The v0.1 repository also contains a historical game ZIP and character-based assets. Their inclusion **does not** mean we are authorized to license or encourage redistribution of them. **Do not repost or mirror those files.** The release/distribution decision remains on hold pending a rights review.
+
+## Licensing and provenance
+
+- **MIT**: only the original, copyrightable source code expressly identified in [RIGHTS_AND_LICENSING.md](RIGHTS_AND_LICENSING.md), to the extent the project contributors own or can license it.
+- **Separate / unverified rights**: all third-party or derived characters, episode text, images, sprites, generated assets, fonts and third-party datasets. See [rights audit](docs/RIGHTS_AUDIT.md), [sources](docs/SOURCES.md) and [font notices](licenses/).
+- A code license **does not authorize** use of *Captain Planet* intellectual property. Noncommercial status and attribution do not replace permission.
+
+## Project credits
+
+Initiated and directed by Kyle Zhang. The initial prototype code and art workflow were developed with substantial ChatGPT assistance; attribution does not establish exclusive human copyright in AI-only material. Thanks to contributors who help with code, testing, and clearly sourced, rights-safe materials.
+
+[中文历史说明](README.zh-CN.md) · [Contribution guide](CONTRIBUTING.md) · [Rights & licensing](RIGHTS_AND_LICENSING.md)

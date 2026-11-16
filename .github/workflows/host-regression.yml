@@ -1,0 +1,23 @@
+name: Host logic and rendering regression
+
+on:
+  push:
+    branches: [main, pre-reddit-readiness-20261116]
+  pull_request:
+
+jobs:
+  host-regression:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Build host game simulation with sanitizers
+        run: |
+          gcc -std=c99 -O1 -g -fsanitize=address,undefined -Wno-unused-variable \
+            tests/test_game.c src/game.c src/render.c -lm -o tests/test_game
+      - name: Validate 113 campaign entries, episode 1 and save handling
+        env:
+          ASAN_OPTIONS: detect_leaks=0
+        run: ./tests/test_game

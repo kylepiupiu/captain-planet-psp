@@ -12,7 +12,33 @@ static void shot(const char *name){render_frame(frame,512);FILE *f=fopen(name,"w
 static int q[MW*MH],prev[MW*MH];
 static int path(float x,float y,float tx,float ty,int follow){int start=(int)y/TILE*MW+(int)x/TILE,end=(int)ty/TILE*MW+(int)tx/TILE,head=0,tail=0;for(int i=0;i<MW*MH;i++)prev[i]=-1;prev[start]=start;q[tail++]=start;int dd[4]={1,-1,MW,-MW};while(head<tail&&prev[end]<0){int p=q[head++];for(int k=0;k<4;k++){int n=p+dd[k];if(n<0||n>=MW*MH||prev[n]>=0||abs(n%MW-p%MW)>1)continue;if(game_blocked((n%MW)*TILE+10,(n/MW)*TILE+10))continue;prev[n]=p;q[tail++]=n;}}if(prev[end]<0)return 0;if(!follow)return 1;int rev[MW*MH],len=0,p=end;while(p!=start){rev[len++]=p;p=prev[p];}while(len){p=rev[--len];float xx=(p%MW)*TILE+10,yy=(p/MW)*TILE+10;int safety=200;while(hypotf(g.x-xx,g.y-yy)>3&&safety--){float dx=xx-g.x,dy=yy-g.y;int b=fabsf(dx)>fabsf(dy)?(dx>0?RIGHT:LEFT):(dy>0?DOWN:UP);game_input(b,128,128);game_update();if(g.mode!=PLAY)return 0;}if(safety<=0)return 0;}return 1;}
 static void no_enemies(void){memset(g.enemies,0,sizeof(g.enemies));memset(g.shots,0,sizeof(g.shots));}
-int main(void){game_init();assert(render_load("assets"));shot("tests/title.ppm");int counts[6]={0};int modes[10]={0};
+int main(void){game_init();assert(render_load("assets"));shot("tests/title.ppm");
+ // Dedicated engineering slice: authored coastal map, elemental roles and sequential goals.
+ game_start(0);
+ assert(g.mode==BRIEF&&g.needed==3);
+ assert(g.tiles[3][20]==3); // coastline is intentionally water
+ assert(g.objs[0].hero==0&&g.objs[1].hero==3&&g.objs[2].hero==2);
+ assert(g.objs[0].active&&g.objs[1].active&&g.objs[2].active);
+ press(CROSS);
+ g.x=g.objs[1].x;g.y=g.objs[1].y;g.hero=g.objs[1].hero;
+ press(SQUARE);assert(g.done==0&&!g.objs[1].state); // cannot skip stage one
+ game_start(0);press(CROSS);
+ for(int i=0;i<3;i++)assert(path(g.x,g.y,g.objs[i].x,g.objs[i].y,0));
+ assert(path(g.x,g.y,g.exitx,g.exity,0));
+ // Full sequence and evacuation gate: a live final guard must block the exit.
+ no_enemies();
+ for(int i=0;i<3;i++){
+  g.x=g.objs[i].x;g.y=g.objs[i].y;g.hero=g.objs[i].hero;
+  press(SQUARE);assert(g.done==i+1&&g.objs[i].state);
+ }
+ game_update();assert(g.boss_spawned==1);
+ g.x=g.exitx;g.y=g.exity;press(SQUARE);assert(g.mode==PLAY);
+ int guard=-1;for(int i=0;i<MAXEN;i++)if(g.enemies[i].active&&g.enemies[i].kind==3){guard=i;break;}
+ assert(guard>=0);g.enemies[guard].hp=0;game_update();
+ assert(g.boss_spawned==2);
+ press(SQUARE);assert(g.mode==CLEAR);
+ printf("PASS episode 1 authored coast, ordered objectives and guard-gated exit\n");
+ int counts[6]={0};int modes[10]={0};
  for(int level=0;level<113;level++){
   game_start(level);const Episode *e=&episodes[level];counts[e->season-1]++;modes[e->mode]++;assert(g.mode==BRIEF);press(CROSS);assert(g.mode==PLAY);no_enemies();
   for(int i=0;i<g.needed;i++){assert(path(g.x,g.y,g.objs[i].x,g.objs[i].y,0));}
